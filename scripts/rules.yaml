@@ -1,0 +1,116 @@
+{
+  "rules": [
+    {
+      "id": "curl_pipe_shell",
+      "severity": "critical",
+      "category": "shell",
+      "pattern": "(curl|wget)[^\\n|;]*(\\||>)\\s*(bash|sh|zsh|python|python3)",
+      "message": "Downloads remote content and executes or redirects it into an interpreter.",
+      "recommendation": "Do not install until the downloaded payload is pinned, reviewed, and executed manually if needed."
+    },
+    {
+      "id": "rm_rf_root",
+      "severity": "critical",
+      "category": "shell",
+      "pattern": "rm\\s+-[a-zA-Z]*r[a-zA-Z]*f[a-zA-Z]*\\s+(/|~|\\$HOME)",
+      "message": "Contains a destructive recursive delete command.",
+      "recommendation": "Do not install; remove destructive commands or confine them to explicit temporary paths."
+    },
+    {
+      "id": "encoded_shell",
+      "severity": "critical",
+      "category": "shell",
+      "pattern": "(base64\\s+(-d|--decode)|openssl\\s+enc\\s+-d)[^\\n|;]*(\\||>)\\s*(bash|sh|zsh|python|python3)",
+      "message": "Decodes hidden content and executes it.",
+      "recommendation": "Do not install; decoded payloads must be visible in source before review."
+    },
+    {
+      "id": "secret_path_access",
+      "severity": "critical",
+      "category": "secret_access",
+      "pattern": "(~|\\$HOME)/\\.(ssh|aws|gcp|azure|env|npmrc|pypirc|netrc|codex|claude)(/|\\b)|id_rsa|id_ed25519",
+      "message": "References common secret or credential locations.",
+      "recommendation": "Do not install unless the access is removed or tightly justified and sandboxed."
+    },
+    {
+      "id": "secret_exfil_keywords",
+      "severity": "critical",
+      "category": "secret_access",
+      "pattern": "(exfiltrate|send\\s+secrets|upload\\s+.*(token|secret|key|credential)|steal\\s+.*(token|secret|key|credential))",
+      "message": "Contains language suggesting credential exfiltration.",
+      "recommendation": "Do not install."
+    },
+    {
+      "id": "sudo_usage",
+      "severity": "high",
+      "category": "shell",
+      "pattern": "\\bsudo\\b",
+      "message": "Requests elevated privileges.",
+      "recommendation": "Review manually; skills should not require sudo for normal installation."
+    },
+    {
+      "id": "world_writable",
+      "severity": "high",
+      "category": "shell",
+      "pattern": "chmod\\s+777\\b",
+      "message": "Makes files world-writable.",
+      "recommendation": "Replace with least-privilege permissions."
+    },
+    {
+      "id": "persistence",
+      "severity": "high",
+      "category": "persistence",
+      "pattern": "(crontab|systemctl|launchctl|LaunchAgents|LaunchDaemons|\\.bashrc|\\.zshrc|\\.profile)",
+      "message": "May modify persistence or shell startup behavior.",
+      "recommendation": "Review manually; persistent changes should be explicit and optional."
+    },
+    {
+      "id": "dynamic_eval",
+      "severity": "high",
+      "category": "shell",
+      "pattern": "\\b(eval|exec)\\s*\\(|subprocess\\.[A-Za-z_]+\\([^\\n)]*shell\\s*=\\s*True",
+      "message": "Uses dynamic execution or shell=True.",
+      "recommendation": "Review the call path and inputs for command injection or hidden execution."
+    },
+    {
+      "id": "prompt_injection",
+      "severity": "high",
+      "category": "prompt_injection",
+      "pattern": "(ignore\\s+(all\\s+)?previous\\s+instructions|do\\s+not\\s+(tell|reveal)|without\\s+asking|bypass\\s+approval|disable\\s+safety|silently\\s+(send|upload|run|execute))",
+      "message": "Contains prompt-injection-like instructions.",
+      "recommendation": "Review manually; remove instructions that hide behavior from the user or override safety policy."
+    },
+    {
+      "id": "unknown_network",
+      "severity": "medium",
+      "category": "network",
+      "pattern": "https?://[^\\s)'\\\"]+",
+      "message": "References an outbound network endpoint.",
+      "recommendation": "Review whether the endpoint is necessary, documented, and non-sensitive."
+    },
+    {
+      "id": "git_package_install",
+      "severity": "medium",
+      "category": "install",
+      "pattern": "(pip|uv|npm|pnpm|yarn)\\s+[^\\n]*(install|add)[^\\n]*(git\\+|github\\.com|gitlab\\.com)",
+      "message": "Installs a package directly from a source repository.",
+      "recommendation": "Prefer pinned release artifacts or inspect the referenced commit."
+    },
+    {
+      "id": "binary_download",
+      "severity": "medium",
+      "category": "install",
+      "pattern": "(download|curl|wget)[^\\n]*(\\.dmg|\\.pkg|\\.exe|\\.bin|\\.tar\\.gz|\\.zip)",
+      "message": "Downloads an archive or binary artifact.",
+      "recommendation": "Review source, checksum verification, and install path."
+    },
+    {
+      "id": "api_key_required",
+      "severity": "medium",
+      "category": "secret_access",
+      "pattern": "(OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|AWS_ACCESS_KEY_ID|SECRET_KEY|API_TOKEN)",
+      "message": "References sensitive environment variables or tokens.",
+      "recommendation": "Ensure secrets are only read when necessary and never logged or transmitted."
+    }
+  ]
+}
