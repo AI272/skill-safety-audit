@@ -1,0 +1,4 @@
+SKILL_SECURITY_REPORT.md
+skill_security_report.json
+__pycache__/
+.pytest_cache/
