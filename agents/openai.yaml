@@ -1,0 +1,6 @@
+interface:
+  display_name: "Skill Safety Audit"
+  short_description: "Audit Agent Skills before installing them"
+  default_prompt: "Use $skill-safety-audit to audit this Agent Skill before installation."
+policy:
+  allow_implicit_invocation: true
