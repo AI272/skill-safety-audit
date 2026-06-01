@@ -1,6 +1,9 @@
 name: Skill Safety Audit
 description: Audit Agent Skills before installing or publishing them
 author: AI272
+branding:
+  icon: shield
+  color: red
 inputs:
   target:
     description: Local path to audit.
