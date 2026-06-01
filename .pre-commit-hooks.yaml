@@ -1,0 +1,7 @@
+- id: skill-safety-audit
+  name: Skill Safety Audit
+  description: Audit Agent Skills before installing or publishing them
+  entry: python scripts/audit_skill.py
+  language: system
+  pass_filenames: false
+  args: ["."]
