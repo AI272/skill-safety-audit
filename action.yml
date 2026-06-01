@@ -1,0 +1,35 @@
+name: Skill Safety Audit
+description: Audit Agent Skills before installing or publishing them
+author: AI272
+inputs:
+  target:
+    description: Local path to audit.
+    required: false
+    default: "."
+  format:
+    description: Output format, markdown or json.
+    required: false
+    default: "markdown"
+  rules:
+    description: Optional extra rules file.
+    required: false
+    default: ""
+  since:
+    description: Optional git ref for diff-mode scanning.
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - name: Run skill safety audit
+      shell: bash
+      run: |
+        set -euo pipefail
+        args=("${{ inputs.target }}" "--format" "${{ inputs.format }}")
+        if [ -n "${{ inputs.rules }}" ]; then
+          args+=("--rules" "${{ inputs.rules }}")
+        fi
+        if [ -n "${{ inputs.since }}" ]; then
+          args+=("--since" "${{ inputs.since }}")
+        fi
+        python "$GITHUB_ACTION_PATH/scripts/audit_skill.py" "${args[@]}"
