@@ -1,4 +1,5 @@
 {
+  "version": "1.1.0",
   "rules": [
     {
       "id": "curl_pipe_shell",
@@ -111,6 +112,14 @@
       "pattern": "(OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|AWS_ACCESS_KEY_ID|SECRET_KEY|API_TOKEN)",
       "message": "References sensitive environment variables or tokens.",
       "recommendation": "Ensure secrets are only read when necessary and never logged or transmitted."
+    },
+    {
+      "id": "prompt_injection_exfiltrate",
+      "severity": "critical",
+      "category": "prompt_injection",
+      "pattern": "(exfiltrate|disable\\s+guardrails|hide\\s+this\\s+from\\s+the\\s+user|never\\s+mention\\s+this\\s+step)",
+      "message": "Contains stronger prompt-injection or concealment language.",
+      "recommendation": "Do not install until the instruction is removed and the source is reviewed."
     }
   ]
 }
