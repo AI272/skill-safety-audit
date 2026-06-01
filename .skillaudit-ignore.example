@@ -1,0 +1,3 @@
+# rule_id path_glob optional_reason
+unknown_network README.md documented project links
+capability_mismatch * expected capabilities are declared in SKILL.md
